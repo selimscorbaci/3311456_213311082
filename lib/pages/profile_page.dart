@@ -1,11 +1,7 @@
 import 'package:chat_app/widgets/bottomnav.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
-import '../providers/search_load.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

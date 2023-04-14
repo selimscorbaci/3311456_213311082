@@ -1,5 +1,4 @@
 import 'package:chat_app/pages/profile_page.dart';
-import 'package:chat_app/providers/is_logged.dart';
 import 'package:chat_app/providers/page_index_cont.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

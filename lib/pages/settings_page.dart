@@ -1,7 +1,6 @@
 import 'package:chat_app/authentication.dart';
 import 'package:chat_app/providers/is_logged.dart';
 import 'package:chat_app/providers/user_info.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
