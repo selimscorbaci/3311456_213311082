@@ -1,4 +1,4 @@
-Chat app
+#Chat app
 
 
 This project is currently under development and does not contain chat functionality.
