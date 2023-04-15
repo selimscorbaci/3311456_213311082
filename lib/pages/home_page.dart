@@ -36,25 +36,3 @@ class HomePage extends StatelessWidget {
           );
   }
 }
-
-class homePagebody extends StatelessWidget {
-  const homePagebody({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            textAlign: TextAlign.center,
-            "It seems there is no dialog with others, click search button and have a chat with your friends",
-            style: TextStyle(fontSize: 18),
-          )
-        ],
-      ),
-    );
-  }
-}
