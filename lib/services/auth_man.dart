@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'model/users.dart' show Users;
+import 'package:uuid/uuid.dart';
+import '../model/users.dart' show Users;
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthManagement {
@@ -15,25 +16,27 @@ class AuthManagement {
         email: userc.email,
         password: userc.password,
       );
+
       if (userc.name.isNotEmpty &&
           userc.email.isNotEmpty &&
           userc.password.isNotEmpty) {
         _firestore.add({
-          "id": userc.getID,
+          "id": Uuid().v1() + DateTime.now().millisecondsSinceEpoch.toString(),
           "name": userc.name,
           "email": userc.email,
           "password": userc.password
         });
       }
-      _showMessageDesign("User created", Colors.green);
+
+      _showMessage("User created", Colors.green);
     } on FirebaseAuthException catch (e) {
       if (e.code == "email-already-in-use") {
-        _showMessageDesign("Email already in use", Colors.red);
+        _showMessage("Email already in use", Colors.red);
       } else if (e.code == "weak-password") {
-        _showMessageDesign("Weak password", Colors.red);
+        _showMessage("Weak password", Colors.red);
       }
     } catch (_) {
-      _showMessageDesign("Something went wrong", Colors.grey);
+      _showMessage("Something went wrong", Colors.grey);
     }
   }
 
@@ -42,7 +45,7 @@ class AuthManagement {
     try {
       await FirebaseAuth.instance.signOut();
     } catch (e) {
-      _showMessageDesign("something went wrong", Colors.grey);
+      _showMessage("something went wrong", Colors.grey);
     }
   }
 
@@ -51,23 +54,32 @@ class AuthManagement {
     try {
       await _auth.signInWithEmailAndPassword(
           email: userc.email, password: userc.password);
-      _showMessageDesign("logged Succesfully", Colors.green);
+      _showMessage("logged Succesfully", Colors.green);
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        _showMessageDesign("User not found", Colors.red);
+        _showMessage("User not found", Colors.red);
         return false;
       } else if (e.code == 'wrong-password') {
-        _showMessageDesign("Wrong password", Colors.red);
+        _showMessage("Wrong password", Colors.red);
         return false;
       }
     } catch (_) {
-      _showMessageDesign("Something went wrong", Colors.grey);
+      _showMessage("Something went wrong", Colors.grey);
       return false;
     }
   }
 
-  void _showMessageDesign(String msg, Color color) {
+  //for changing user password
+  Future<void> verifyEmail(String email) async {
+    try {
+      _auth.sendPasswordResetEmail(email: email.trim());
+    } catch (_) {
+      _showMessage("Something went wrong", Colors.grey);
+    }
+  }
+
+  void _showMessage(String msg, Color color) {
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,

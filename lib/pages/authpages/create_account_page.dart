@@ -1,10 +1,10 @@
-import 'package:chat_app/authentication.dart';
-import 'package:chat_app/providers/is_logged.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:chat_app/providers/user_info.dart';
+import 'package:flutter/material.dart';
+import '../../services/auth_man.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
+class AccountPage extends StatelessWidget {
+  // const AccountPage({super.key});
   AuthManagement auth = AuthManagement();
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,8 @@ class LoginPage extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.only(top: 10, right: 10, left: 10),
                 child: Text(
-                  "Sign in to Continue",
+                  textAlign: TextAlign.center,
+                  "Create Account to \nContinue",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 25,
@@ -36,6 +37,29 @@ class LoginPage extends StatelessWidget {
               flex: 2,
               child: Column(
                 children: [
+                  Expanded(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(right: 8, left: 8, bottom: 8),
+                      child: TextFormField(
+                        onChanged: (username) {
+                          Provider.of<Userinfo>(context, listen: false)
+                              .toggleUsername(username);
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.account_box),
+                          label: Text(
+                            "name",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: Padding(
                       padding:
@@ -95,28 +119,17 @@ class LoginPage extends StatelessWidget {
                         width: 150,
                         height: 50,
                         child: Consumer<Userinfo>(
-                          builder: (_, value, __) {
-                            return Consumer<IsLogged>(
-                              builder: (context, value2, child) {
-                                return TextButton(
-                                  onPressed: () {
-                                    auth.logIn(value.userAdded).then((val) {
-                                      if (val == true) {
-                                        value2.setIsLogged(true);
-                                        Navigator.of(context)
-                                            .pushNamedAndRemoveUntil(
-                                                '/', (route) => false);
-                                      }
-                                    });
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      "Login",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
+                          builder: (_, user, __) {
+                            return TextButton(
+                              onPressed: () {
+                                auth.createAccount(user.userAdded);
                               },
+                              child: Center(
+                                child: Text(
+                                  "Create Account",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             );
                           },
                         ),
@@ -126,10 +139,10 @@ class LoginPage extends StatelessWidget {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushNamed('/accountPage');
+                        Navigator.of(context).pop();
                       },
                       child: Text(
-                        "or create a Account",
+                        "login",
                         style: TextStyle(
                             color: Colors.red,
                             decoration: TextDecoration.underline),

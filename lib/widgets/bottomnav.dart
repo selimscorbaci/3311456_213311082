@@ -37,16 +37,14 @@ class BottomNavigation extends StatelessWidget {
                   icon: Icons.search,
                   text: "Search",
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/searchPage');
-                    value.changeIndex(1);
+                    value.changeIndex(2);
                   },
                 ),
                 GButton(
                   icon: Icons.settings,
                   text: "Settings",
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/settingsPage');
-                    value.changeIndex(1);
+                    value.changeIndex(3);
                   },
                 ),
               ]);

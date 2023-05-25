@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/search_load.dart';
+import '../widgets/bottomnav.dart';
 
 class SearchPage extends StatelessWidget {
   // const SearchPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -42,8 +44,9 @@ class SearchPage extends StatelessWidget {
                               title: Text(user.name.toString()),
                               subtitle: Text(user.email.toString()),
                               onTap: () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed('/chatPage');
+                                if (user.uid != null) {
+                                  Navigator.of(context).pushNamed('/chatPage');
+                                }
                               },
                               trailing: Icon(Icons.add),
                             );
@@ -54,6 +57,7 @@ class SearchPage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }

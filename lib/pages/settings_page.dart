@@ -1,6 +1,7 @@
-import 'package:chat_app/authentication.dart';
+import 'package:chat_app/services/auth_man.dart';
 import 'package:chat_app/providers/is_logged.dart';
 import 'package:chat_app/providers/user_info.dart';
+import 'package:chat_app/widgets/bottomnav.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +31,7 @@ class SettingsPage extends StatelessWidget {
                   builder: (_, islog, __) {
                     return IconButton(
                       onPressed: () {
-                        AuthManagement auth = AuthManagement();
-                        auth.signOut();
+                        AuthManagement().signOut();
                         islog.setIsLogged(false);
                         user.toggleUseremail("");
                         user.toggleUsername("");
@@ -48,6 +48,7 @@ class SettingsPage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }

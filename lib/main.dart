@@ -3,7 +3,7 @@ import 'package:chat_app/providers/is_logged.dart';
 import 'package:chat_app/providers/page_index_cont.dart';
 import 'package:chat_app/providers/search_load.dart';
 import 'package:chat_app/providers/user_info.dart';
-import 'package:chat_app/route_generator.dart';
+import 'package:chat_app/config/route_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';

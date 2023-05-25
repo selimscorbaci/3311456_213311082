@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' show ChangeNotifier;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IsLogged with ChangeNotifier {
-  bool islogged = false; //change it as false
+  bool islogged = true; //change it as false
   static SharedPreferences? _sharedpref;
   void setIsLogged(bool value) {
     islogged = value;

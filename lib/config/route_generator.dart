@@ -1,7 +1,8 @@
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/home_page.dart';
-import 'package:chat_app/pages/create_account_page.dart';
-import 'package:chat_app/pages/login_page.dart';
+import 'package:chat_app/pages/authpages/create_account_page.dart';
+import 'package:chat_app/pages/authpages/login_page.dart';
+import 'package:chat_app/pages/profile_page.dart';
 import 'package:chat_app/pages/search_page.dart';
 import 'package:chat_app/pages/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => ChatPage());
       case '/settingsPage':
         return MaterialPageRoute(builder: (_) => SettingsPage());
+      case '/profilePage':
+        return MaterialPageRoute(builder: (_) => ProfilePage());
       default:
         break;
     }
