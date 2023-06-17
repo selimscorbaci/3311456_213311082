@@ -55,22 +55,32 @@ class FirestoreManagement {
     _userID = await currUID();
     _userName = await currUserName();
     _docIdController = await docIDController(touid);
-    _photourl = await StorageManagement().takeUserPhotoUrl();
+
     if (touid == "") {
+      await StorageManagement().takeUserPhotoUrl().then((value) {
+        _photourl = value;
+      });
       return [_userID, _userName, _photourl];
     } else {
-      return [_userID, _userName, _docIdController, _photourl];
+      return [_userID, _userName, _docIdController];
     }
   }
 
   //touid is your friends id
-  Future<void> haveChat(String toUid, String toName, String content) async {
+  Future<void> haveChat(String? toUid, String toName, String? content) async {
     if (toUid != null && content != null) {
       _userID = await currUID();
       _userName = await currUserName();
       _docIdController = await docIDController(toUid);
-      _photourl = await StorageManagement().takeUserPhotoUrl();
-      String friendphotourl = await StorageManagement().takeUserPhotoUrl(toUid);
+      await StorageManagement().takeUserPhotoUrl().then((value) {
+        _photourl = value;
+      });
+      String friendurl = "";
+      await StorageManagement().takeUserPhotoUrl(toUid).then((value) {
+        if (value != "") {
+          friendurl = value;
+        }
+      });
       await FirebaseFirestore.instance
           .collection('messages')
           .doc(_docIdController)
@@ -80,7 +90,10 @@ class FirestoreManagement {
         'to_uid': toUid,
         'to_name': toName,
         'from_photourl': _photourl,
-        'to_photourl': friendphotourl
+        'to_photourl': friendurl
+
+        // 'from_photourl': _photourl,
+        // 'to_photourl': friendphotourl
       }); //doc has a id
 
       await FirebaseFirestore.instance
@@ -94,16 +107,5 @@ class FirestoreManagement {
         'uid': _userID
       }); //we storage the data with current user id and his/her friend's id
     }
-  }
-
-  Future lastMessage() async {
-    final lstmsg = await FirebaseFirestore.instance
-        .collection('messages')
-        .doc(
-            "2d31f720-f400-11ed-876d-2fc13a75d8c51684251711378304307b0-f400-11ed-a050-e5569030c11e1684251716523")
-        .collection('messagelist')
-        .orderBy('addtime');
-
-    return lstmsg;
   }
 }

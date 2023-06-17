@@ -15,7 +15,7 @@ class ChatsPage extends StatelessWidget {
         ),
         elevation: 0,
       ),
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Container(
         width: MediaQuery.of(context).size.width,
         child: Column(

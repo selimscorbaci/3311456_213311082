@@ -11,16 +11,18 @@ class StorageManagement {
   String _url = "";
 
   Future<String> takeUserPhotoUrl([String toUid = ""]) async {
-    _userID = await FirestoreManagement().currUID();
-
-    _url = await FirebaseStorage.instance
-        .ref()
-        .child('profilepictures')
-        .child((toUid == "") ? _userID : toUid)
-        .child(await FirestoreManagement().currUserName())
-        .getDownloadURL();
-
-    return _url;
+    try {
+      _userID = await FirestoreManagement().currUID();
+      _url = await FirebaseStorage.instance
+          .ref()
+          .child('profilepictures')
+          .child((toUid == "") ? _userID : toUid)
+          // .child("profilepicture")
+          .getDownloadURL();
+      return _url;
+    } catch (_) {
+      return "";
+    }
   }
 
   //this is only for android and ios(this function does not work on web)
@@ -34,8 +36,8 @@ class StorageManagement {
         final ref = await FirebaseStorage.instance
             .ref()
             .child('profilepictures')
-            .child(_userID)
-            .child(await FirestoreManagement().currUserName());
+            .child(_userID);
+        // .child("profilepicture");
 
         ref.putFile(_file!);
 
@@ -49,10 +51,8 @@ class StorageManagement {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userDocId.docs.first.id)
-            .update({"photo_url": _url});
+            .update({"photourl": _url});
       }
-    } catch (err) {
-      print("error: " + err.toString());
-    }
+    } catch (_) {}
   }
 }

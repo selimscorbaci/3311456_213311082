@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/search_load.dart';
@@ -12,49 +11,55 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                child: Consumer<SearchLoad>(
-                  builder: (_, email, __) {
-                    return TextField(
-                      onChanged: (value) {
-                        onSearch(_, value);
-                      },
-                      decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          hintText: "Enter a email"),
-                    );
-                  },
+        child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/background.png'))),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  child: Consumer<SearchLoad>(
+                    builder: (_, email, __) {
+                      return TextField(
+                        onChanged: (value) {
+                          onSearch(_, value);
+                        },
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            hintText: "Enter a email"),
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Card(
-                  child: (Provider.of<SearchLoad>(context).email?.isNotEmpty ??
-                          false)
-                      ? Consumer<SearchLoad>(
-                          builder: (_, user, __) {
-                            return ListTile(
-                              leading:
-                                  CircleAvatar(backgroundColor: Colors.red),
-                              title: Text(user.name.toString()),
-                              subtitle: Text(user.email.toString()),
-                              onTap: () {
-                                if (user.uid != null) {
-                                  Navigator.of(context).pushNamed('/chatPage');
-                                }
-                              },
-                              trailing: Icon(Icons.add),
-                            );
-                          },
-                        )
-                      : Container()),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Card(
+                    child:
+                        (Provider.of<SearchLoad>(context).email?.isNotEmpty ??
+                                false)
+                            ? Consumer<SearchLoad>(
+                                builder: (_, user, __) {
+                                  return ListTile(
+                                    leading: CircleAvatar(),
+                                    title: Text(user.name.toString()),
+                                    subtitle: Text(user.email.toString()),
+                                    onTap: () {
+                                      if (user.uid != null) {
+                                        Navigator.of(context)
+                                            .pushNamed('/chatPage');
+                                      }
+                                    },
+                                    trailing: Icon(Icons.add),
+                                  );
+                                },
+                              )
+                            : Container()),
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigation(),

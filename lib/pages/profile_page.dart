@@ -1,65 +1,95 @@
 import 'package:chat_app/services/firestore_man.dart';
 import 'package:chat_app/services/storage_man.dart';
 import 'package:chat_app/widgets/bottomnav.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../widgets/profileknowledge.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String userName = "";
+  String url = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    StorageManagement().takeUserPhotoUrl().then((value) {
+      url = value;
+    }).whenComplete(() {
+      setState(() {});
+    });
+    FirestoreManagement().currUserName().then((value) {
+      userName = value;
+    }).whenComplete(() {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.white,
       appBar: AppBar(
           title: const Text("Profile"),
           backgroundColor: const Color.fromRGBO(75, 75, 150, 1)),
-      body: Center(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                onTap: () async {
-                  String url = await StorageManagement().takeUserPhotoUrl();
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        width: 200,
-                        height: 200,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            url,
-                            fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: GestureDetector(
+                  onTap: () {
+                    try {
+                      if (url != "") {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ClipRRect(
+                              child: Image.network(
+                                url,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    } catch (_) {}
+                  },
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: MediaQuery.of(context).size.width * 0.30,
+                        backgroundImage: (url != "") ? NetworkImage(url) : null,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.deepPurpleAccent),
+                          child: IconButton(
+                            color: Colors.white,
+                            onPressed: () async {
+                              await StorageManagement().loadFromCamera();
+                            },
+                            icon: Icon(Icons.add_a_photo_outlined),
                           ),
                         ),
-                      );
-                    },
-                  );
-
-                  NetworkImage(await StorageManagement().takeUserPhotoUrl());
-                },
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.height * 0.30,
-                  child: CircleAvatar(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            IconButton(
-                onPressed: () async {
-                  await StorageManagement().loadFromCamera();
-                },
-                icon: Icon(Icons.add_a_photo)),
-            Text(
-              "Email: " + (FirebaseAuth.instance.currentUser?.email).toString(),
-              style: GoogleFonts.lora(
-                  fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * 0.05),
-            ),
-          ],
+              ProfileKnowledge(userName: userName, text: "Name"),
+              ProfileKnowledge(text: "About"),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigation(),

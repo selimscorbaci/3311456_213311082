@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/firestore_man.dart';
 import '../widgets/userchat.dart';
+import '../providers/input_cont.dart';
 
 class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text((Provider.of<SearchLoad>(context).name).toString()),
         elevation: 0,
@@ -83,8 +84,8 @@ class ChatPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.90,
-                      child: Consumer<ChatProvider>(
+                      width: MediaQuery.of(context).size.width * 0.88,
+                      child: Consumer<InputProvider>(
                         builder: (_, chat, __) {
                           return TextField(
                             controller: TextEditingController.fromValue(
@@ -110,29 +111,26 @@ class ChatPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Consumer<SearchLoad>(
-                        builder: (_, user, __) {
-                          return Consumer<ChatProvider>(
-                            builder: (_, message, __) {
-                              return GestureDetector(
-                                onTap: () {
-                                  FirestoreManagement().haveChat(
-                                      user.uid.toString(),
-                                      user.name.toString(),
-                                      (message.input?.text).toString());
-                                  message.isTouched();
-                                },
-                                child: Icon(
-                                  Icons.send,
-                                  color: Colors.white,
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
+                    Consumer<SearchLoad>(
+                      builder: (_, user, __) {
+                        return Consumer<InputProvider>(
+                          builder: (_, message, __) {
+                            return GestureDetector(
+                              onTap: () {
+                                FirestoreManagement().haveChat(
+                                    user.uid.toString(),
+                                    user.name.toString(),
+                                    (message.input?.text).toString());
+                                message.isTouched();
+                              },
+                              child: Icon(
+                                Icons.send,
+                                color: Colors.white,
+                              ),
+                            );
+                          },
+                        );
+                      },
                     )
                   ],
                 ),
@@ -142,22 +140,5 @@ class ChatPage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class ChatProvider extends ChangeNotifier {
-  TextEditingController? input = TextEditingController();
-  bool isSended = false;
-  void addInput(String text) {
-    input?.text = text;
-    notifyListeners();
-  }
-
-  void isTouched() {
-    (input?.text != "") ? isSended = true : isSended = false;
-    if (isSended) {
-      input?.clear();
-    }
-    notifyListeners();
   }
 }

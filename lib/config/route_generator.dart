@@ -1,3 +1,4 @@
+import 'package:chat_app/pages/authpages/passforgot_page.dart';
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/home_page.dart';
 import 'package:chat_app/pages/authpages/create_account_page.dart';
@@ -6,6 +7,8 @@ import 'package:chat_app/pages/profile_page.dart';
 import 'package:chat_app/pages/search_page.dart';
 import 'package:chat_app/pages/settings_page.dart';
 import 'package:flutter/material.dart';
+
+import '../pages/authpages/changep_page.dart';
 
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
@@ -24,8 +27,15 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SettingsPage());
       case '/profilePage':
         return MaterialPageRoute(builder: (_) => ProfilePage());
+      case '/changepPage':
+        return MaterialPageRoute(builder: (_) => ChangePassword());
+      case '/forgotpasswordPage':
+        return MaterialPageRoute(
+          builder: (_) => ForgotPage(),
+        );
       default:
         break;
     }
+    return null;
   }
 }

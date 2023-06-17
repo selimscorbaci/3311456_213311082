@@ -1,5 +1,8 @@
-import 'package:chat_app/pages/chat_page.dart' show ChatProvider;
-import 'package:chat_app/providers/is_logged.dart';
+import 'package:chat_app/pages/authpages/login_page.dart';
+import 'package:chat_app/providers/theme_cont.dart';
+import 'package:chat_app/services/auth_man.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'providers/input_cont.dart';
 import 'package:chat_app/providers/page_index_cont.dart';
 import 'package:chat_app/providers/search_load.dart';
 import 'package:chat_app/providers/user_info.dart';
@@ -12,16 +15,21 @@ import 'pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await IsLogged().createSharedPrefObj();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  await ThemeManagement().createSharedPrefObj();
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => IsLogged()),
+    Provider<AuthManagement>(
+      create: (_) => AuthManagement(),
+    ),
+    StreamProvider(
+        create: (context) => context.read<AuthManagement>().authStateChanges,
+        initialData: null),
+    ChangeNotifierProvider(create: (_) => ThemeManagement()),
     ChangeNotifierProvider(create: (_) => Userinfo()),
     ChangeNotifierProvider(create: (_) => SearchLoad()),
-    ChangeNotifierProvider(create: (_) => ChatProvider()),
+    ChangeNotifierProvider(create: (_) => InputProvider()),
     ChangeNotifierProvider(create: (_) => PageIndexController())
   ], child: MyApp()));
 }
@@ -30,15 +38,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'chatapps',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-      initialRoute:
-          Provider.of<IsLogged>(context).islogged ? '/' : '/loginPage',
+      theme: Provider.of<ThemeManagement>(context).themeColor,
+      // initialRoute: (context.watch<User?>() != null) ? '/' : '/loginPage',
       onGenerateRoute: RouteGenerator.generateRoute,
-      home: HomePage(),
+      // home: HomePage(),
+      home: (context.watch<User?>() != null) ? HomePage() : LoginPage(),
     );
   }
 }
