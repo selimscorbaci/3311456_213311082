@@ -99,6 +99,19 @@ class _SettingsPageState extends State<SettingsPage>
               },
             ),
           ),
+          Card(
+            child: ListTile(
+              title: Text(
+                "Your istatictics",
+                style: GoogleFonts.signika(
+                  fontSize: 18,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed('/statisticsPage');
+              },
+            ),
+          ),
           Center(
             child: Consumer<Userinfo>(
               builder: (_, user, __) {

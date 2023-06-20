@@ -3,6 +3,7 @@ import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/home_page.dart';
 import 'package:chat_app/pages/authpages/create_account_page.dart';
 import 'package:chat_app/pages/authpages/login_page.dart';
+import 'package:chat_app/pages/statistics_page.dart';
 import 'package:chat_app/pages/profile_page.dart';
 import 'package:chat_app/pages/search_page.dart';
 import 'package:chat_app/pages/settings_page.dart';
@@ -32,6 +33,10 @@ class RouteGenerator {
       case '/forgotpasswordPage':
         return MaterialPageRoute(
           builder: (_) => ForgotPage(),
+        );
+      case '/statisticsPage':
+        return MaterialPageRoute(
+          builder: (_) => StatisticsPage(),
         );
       default:
         break;
