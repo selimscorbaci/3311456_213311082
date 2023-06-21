@@ -41,7 +41,7 @@ class ForgotPage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: OutlinedButton(
                       onPressed: () async {
-                        AuthManagement().verifyEmail(email.text);
+                        AuthManagement().sendpasswordresetEmail(email.text);
                       },
                       child: Text(
                         "Send Link To email",

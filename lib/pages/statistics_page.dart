@@ -44,7 +44,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   void setSpot(int val) async {
-    List data = await FirestoreManagement().getAllCurrentUserMessages();
+    List data =
+        await FirestoreManagement().getAllCurrentUserMessageProperties();
     List count = [0, 0, 0, 0, 0, 0, 0];
     int hour = DateTime.now().hour;
 

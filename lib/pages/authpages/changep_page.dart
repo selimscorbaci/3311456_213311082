@@ -22,36 +22,16 @@ class _ChangePasswordState extends State<ChangePassword> {
       body: Padding(
         padding: const EdgeInsets.only(top: 80, right: 15, left: 15),
         child: SingleChildScrollView(
-            child: Column(
-          children: [
-            TextFormField(
-              readOnly: true,
-              keyboardType: TextInputType.emailAddress,
-              initialValue: FirebaseAuth.instance.currentUser?.email,
-              decoration: InputDecoration(
-                prefixIcon: Icon(Icons.email),
-                label: Text(
-                  "Email",
-                  style: TextStyle(color: Colors.grey),
-                ),
-                hintStyle: TextStyle(color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: TextFormField(
-                controller: newpassword,
-                obscureText: true,
-                keyboardType: TextInputType.number,
-                maxLength: 9,
+          child: Column(
+            children: [
+              TextFormField(
+                readOnly: true,
+                keyboardType: TextInputType.emailAddress,
+                initialValue: FirebaseAuth.instance.currentUser?.email,
                 decoration: InputDecoration(
-                  counterText: "",
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: Icon(Icons.email),
                   label: Text(
-                    "New Password",
+                    "Email",
                     style: TextStyle(color: Colors.grey),
                   ),
                   hintStyle: TextStyle(color: Colors.grey),
@@ -60,50 +40,71 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: TextFormField(
-                controller: confirmpassword,
-                obscureText: true,
-                keyboardType: TextInputType.number,
-                maxLength: 9,
-                decoration: InputDecoration(
-                  counterText: "",
-                  prefixIcon: Icon(Icons.lock),
-                  label: Text(
-                    "Confirm New Password",
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  hintStyle: TextStyle(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: TextFormField(
+                  controller: newpassword,
+                  obscureText: true,
+                  keyboardType: TextInputType.number,
+                  maxLength: 9,
+                  decoration: InputDecoration(
+                    counterText: "",
+                    prefixIcon: Icon(Icons.lock),
+                    label: Text(
+                      "New Password",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: OutlinedButton(
-                onPressed: () async {
-                  AuthManagement()
-                      .changePassword(
-                          newpassword.text, (confirmpassword.text).toString())
-                      .whenComplete(() {
-                    setState(() {
-                      confirmpassword.clear();
-                      newpassword.clear();
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: TextFormField(
+                  controller: confirmpassword,
+                  obscureText: true,
+                  keyboardType: TextInputType.number,
+                  maxLength: 9,
+                  decoration: InputDecoration(
+                    counterText: "",
+                    prefixIcon: Icon(Icons.lock),
+                    label: Text(
+                      "Confirm New Password",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: OutlinedButton(
+                  onPressed: () async {
+                    AuthManagement()
+                        .changePassword(
+                            newpassword.text, (confirmpassword.text).toString())
+                        .whenComplete(() {
+                      setState(() {
+                        confirmpassword.clear();
+                        newpassword.clear();
+                      });
                     });
-                  });
-                },
-                child: Text(
-                  'Change Password',
-                  style: TextStyle(color: Colors.white),
+                  },
+                  child: Text(
+                    'Change Password',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
-            )
-          ],
-        )),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

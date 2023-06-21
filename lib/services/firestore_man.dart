@@ -1,6 +1,7 @@
 import 'package:chat_app/services/storage_man.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
 class FirestoreManagement {
   String _userID = "";
@@ -109,8 +110,17 @@ class FirestoreManagement {
     }
   }
 
-  // returns current user's messages as list
-  Future<List> getAllCurrentUserMessages() async {
+  Future<void> addUser(String name, String email) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      "id": Uuid().v1() + DateTime.now().millisecondsSinceEpoch.toString(),
+      "name": name,
+      "email": email,
+      "photourl": ""
+    });
+  }
+
+  //returns the current user message properties such as content,addtime,uid
+  Future<List> getAllCurrentUserMessageProperties() async {
     List tmp = [];
     List data = [];
     String userid = await FirestoreManagement().currUID();
@@ -130,6 +140,6 @@ class FirestoreManagement {
       }
     }
 
-    return data; //returns the current user message properties such as content,addtime,uid
+    return data;
   }
 }

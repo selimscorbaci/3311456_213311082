@@ -1,3 +1,4 @@
+import 'package:chat_app/services/firestore_man.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +23,16 @@ class AuthManagement {
       if (userc.name.isNotEmpty &&
           userc.email.isNotEmpty &&
           userc.password.isNotEmpty) {
-        _firestore.add({
-          "id": Uuid().v1() + DateTime.now().millisecondsSinceEpoch.toString(),
-          "name": userc.name,
-          "email": userc.email,
-        });
+        await FirestoreManagement().addUser(userc.name, userc.email);
+        // _firestore.add({
+        //   "id": Uuid().v1() + DateTime.now().millisecondsSinceEpoch.toString(),
+        //   "name": userc.name,
+        //   "email": userc.email,
+        //   "photourl": ""
+        // });
       }
 
-      _showMessage("User created", Colors.green);
+      _showMessage("User created", Colors.blueGrey);
     } on FirebaseAuthException catch (e) {
       if (e.code == "email-already-in-use") {
         _showMessage("Email already in use", Colors.blueGrey);
@@ -73,7 +76,7 @@ class AuthManagement {
   }
 
   //for changing user password with reset link
-  Future<void> verifyEmail(String email) async {
+  Future<void> sendpasswordresetEmail(String email) async {
     try {
       _auth.sendPasswordResetEmail(email: email.trim());
       _showMessage("Sent", Colors.blueGrey);
@@ -86,17 +89,16 @@ class AuthManagement {
       String newPassword, String passwordconfirm) async {
     try {
       if (newPassword != passwordconfirm) {
-        _showMessage('Passwords do not match', Colors.blueGrey);
-        throw "";
+        throw "Passwords do not match";
+      }
+      if (passwordconfirm.length < 6 && newPassword.length < 6) {
+        throw "Weak Password, password's length has to more than 5";
       }
       _showMessage("Password changed", Colors.grey);
       await _auth.currentUser?.updatePassword(newPassword);
-    } on FirebaseAuthException catch (err) {
-      if (err.code == "weak-password") {
-        _showMessage("Weak Password, password's length has to more than 5",
-            Colors.blueGrey);
-      }
-    } catch (_) {}
+    } catch (err) {
+      _showMessage("$err", Colors.blueGrey);
+    }
   }
 
   void _showMessage(String msg, Color color) {

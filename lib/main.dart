@@ -41,9 +41,7 @@ class MyApp extends StatelessWidget {
       title: 'chatapps',
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeManagement>(context).themeColor,
-      // initialRoute: (context.watch<User?>() != null) ? '/' : '/loginPage',
       onGenerateRoute: RouteGenerator.generateRoute,
-      // home: HomePage(),
       home: (context.watch<User?>() != null) ? HomePage() : LoginPage(),
     );
   }
