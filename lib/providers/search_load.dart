@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' show ChangeNotifier;
 
 class SearchLoad extends ChangeNotifier {
+  //this provider needs to fix
   String? email;
   String? name;
   String? uid;
