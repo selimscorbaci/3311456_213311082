@@ -123,7 +123,7 @@ class FirestoreManagement {
   Future<List> getAllCurrentUserMessageProperties() async {
     List tmp = [];
     List data = [];
-    String userid = await FirestoreManagement().currUID();
+    _userID = await FirestoreManagement().currUID();
 
     QuerySnapshot mainCollectionRef =
         await FirebaseFirestore.instance.collection('messages').get();
@@ -135,7 +135,7 @@ class FirestoreManagement {
       }
     }
     for (int i = 0; i < tmp.length; i++) {
-      if (tmp[i]['uid'] == userid) {
+      if (tmp[i]['uid'] == _userID) {
         data.add(tmp[i]);
       }
     }

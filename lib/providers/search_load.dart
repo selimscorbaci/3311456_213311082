@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart'
-    show ChangeNotifier, TextEditingController;
+import 'package:flutter/material.dart' show ChangeNotifier;
 
 class SearchLoad extends ChangeNotifier {
   String? email;
