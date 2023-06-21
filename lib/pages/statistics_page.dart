@@ -27,24 +27,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   String TimePeriod(int value) {
     int period = 6 - value; //0
-    String time;
-    if (((DateTime.now().hour)) == 0) {
-      switch (value) {
-        case 0: //18:00
-          return "18:00";
-        case 1: //19:00
-          return "19:00";
-        case 2: //20:00
-          return "20:00";
-        case 3: //21:00
-          return "21:00";
-        case 4: //22:00
-          return "22:00";
-        case 5: //23:00
-          return "23:00";
-        case 6: //00:00
-          return "00:00";
-      }
+    String time = DateTime.utc(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day, DateTime.now().hour - period)
+        .hour
+        .toString();
+
+    if (((DateTime.now().hour)) >= 0 && DateTime.now().hour <= 6) {
+      return time.length > 1 ? time + ":00" : "0" + time + ":00";
     }
 
     time = (DateTime.now().hour - period <= 9) //00:
@@ -55,9 +44,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   void setSpot(int val) async {
-    List data = await getsubcollectiondata(); // we need to update allSpots
+    List data = await FirestoreManagement().getAllCurrentUserMessages();
     List count = [0, 0, 0, 0, 0, 0, 0];
     int hour = DateTime.now().hour;
+
     switch (val) {
       case 0:
         hour -= 6;
@@ -81,13 +71,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
         break;
     }
     for (int i = 0; i < data.length; i++) {
-      if ((data[i]['addtime'] as Timestamp).toDate().hour == hour &&
-          (data[i]['addtime'] as Timestamp).toDate().year ==
-              DateTime.now().year &&
-          (data[i]['addtime'] as Timestamp).toDate().month ==
-              DateTime.now().month &&
-          (data[i]['addtime'] as Timestamp).toDate().day ==
-              DateTime.now().day) {
+      DateTime tmpTime = (data[i]['addtime'] as Timestamp).toDate();
+
+      if (DateTime.utc(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+              DateTime.now().hour + hour - DateTime.now().hour) ==
+          DateTime.utc(
+              tmpTime.year, tmpTime.month, tmpTime.day, tmpTime.hour)) {
         count[val] += 1;
       }
     }
@@ -142,29 +134,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
       axisSide: meta.axisSide,
       child: Text(text, style: style),
     );
-  }
-
-  Future<List> getsubcollectiondata() async {
-    List tmp = [];
-    List data = [];
-    String userid = await FirestoreManagement().currUID();
-
-    QuerySnapshot mainCollectionRef =
-        await FirebaseFirestore.instance.collection('messages').get();
-    for (QueryDocumentSnapshot maindoc in mainCollectionRef.docs) {
-      QuerySnapshot subcollectionDocs =
-          await maindoc.reference.collection('messagelist').get();
-      for (QueryDocumentSnapshot subDoc in subcollectionDocs.docs) {
-        tmp.add(subDoc.data());
-      }
-    }
-    for (int i = 0; i < tmp.length; i++) {
-      if (tmp[i]['uid'] == userid) {
-        data.add(tmp[i]);
-      }
-    }
-
-    return data; //returns the current user message properties such as content,addtime,uid
   }
 
   @override
@@ -309,7 +278,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           minY: 0,
                           titlesData: FlTitlesData(
                             leftTitles: const AxisTitles(
-                              axisNameWidget: Text('count'),
+                              axisNameWidget: Text(
+                                'Frequency',
+                                style: TextStyle(fontSize: 13),
+                              ),
                               axisNameSize: 24,
                               sideTitles: SideTitles(
                                 showTitles: false,

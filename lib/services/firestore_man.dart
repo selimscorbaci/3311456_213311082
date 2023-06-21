@@ -108,4 +108,28 @@ class FirestoreManagement {
       }); //we storage the data with current user id and his/her friend's id
     }
   }
+
+  // returns current user's messages as list
+  Future<List> getAllCurrentUserMessages() async {
+    List tmp = [];
+    List data = [];
+    String userid = await FirestoreManagement().currUID();
+
+    QuerySnapshot mainCollectionRef =
+        await FirebaseFirestore.instance.collection('messages').get();
+    for (QueryDocumentSnapshot maindoc in mainCollectionRef.docs) {
+      QuerySnapshot subcollectionDocs =
+          await maindoc.reference.collection('messagelist').get();
+      for (QueryDocumentSnapshot subDoc in subcollectionDocs.docs) {
+        tmp.add(subDoc.data());
+      }
+    }
+    for (int i = 0; i < tmp.length; i++) {
+      if (tmp[i]['uid'] == userid) {
+        data.add(tmp[i]);
+      }
+    }
+
+    return data; //returns the current user message properties such as content,addtime,uid
+  }
 }
