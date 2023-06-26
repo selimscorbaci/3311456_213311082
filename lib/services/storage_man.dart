@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:chat_app/models/user_model.dart';
 import 'package:chat_app/services/firestore_man.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,20 +7,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class StorageManagement {
-  String _userID = "";
   File? _file;
-  String _url = "";
-
+  UserModel user = UserModel.fromJson({});
   Future<String> takeUserPhotoUrl([String toUid = ""]) async {
     try {
-      _userID = await FirestoreManagement().currUID();
-      _url = await FirebaseStorage.instance
+      user.uid = await FirestoreManagement().currUID();
+      user.photourl = await FirebaseStorage.instance
           .ref()
           .child('profilepictures')
-          .child((toUid == "") ? _userID : toUid)
+          .child((toUid == "") ? user.uid! : toUid)
           // .child("profilepicture")
           .getDownloadURL();
-      return _url;
+      return user.photourl ?? "";
     } catch (_) {
       return "";
     }
@@ -32,16 +31,16 @@ class StorageManagement {
           await ImagePicker().pickImage(source: ImageSource.camera);
       if (pickedImage != null) {
         _file = File(pickedImage.path);
-        _userID = await FirestoreManagement().currUID();
+        user.uid = await FirestoreManagement().currUID();
         final ref = await FirebaseStorage.instance
             .ref()
             .child('profilepictures')
-            .child(_userID);
+            .child(user.uid!);
         // .child("profilepicture");
 
         ref.putFile(_file!);
 
-        _url = await ref.getDownloadURL();
+        user.photourl = await ref.getDownloadURL();
 
         final userDocId = await FirebaseFirestore.instance
             .collection('users')
@@ -51,7 +50,7 @@ class StorageManagement {
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userDocId.docs.first.id)
-            .update({"photourl": _url});
+            .update({"photourl": user.photourl});
       }
     } catch (_) {}
   }

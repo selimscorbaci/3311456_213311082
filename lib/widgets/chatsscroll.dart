@@ -1,6 +1,6 @@
-import 'package:chat_app/providers/search_load.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/user_info.dart';
 
 // ignore: must_be_immutable
 class ChatsScrolling extends StatelessWidget {
@@ -21,16 +21,16 @@ class ChatsScrolling extends StatelessWidget {
             ? users[index]['from_photourl']
             : users[index]['to_photourl'])
         .toString();
-    return Consumer<SearchLoad>(
+    return Consumer<Userinfo>(
       builder: (_, friend, __) {
         return GestureDetector(
           onTap: () async {
-            friend.addName(
+            friend.addUsername(
                 userInformation?.elementAt(1) == users[index]['to_name']
                     ? users[index]['from_name']
                     : users[index]['to_name']);
 
-            friend.adduid(
+            friend.addUserid(
                 (users[index]["to_uid"] == userInformation?.elementAt(0))
                     ? users[index]["from_uid"]
                     : users[index]["to_uid"]);

@@ -43,7 +43,7 @@ class AccountPage extends StatelessWidget {
                         child: Consumer<Userinfo>(
                           builder: (_, user, __) {
                             return UserForm(
-                                user.toggleUsername,
+                                user.addUsername,
                                 false,
                                 TextInputType.emailAddress,
                                 "Name",
@@ -58,7 +58,7 @@ class AccountPage extends StatelessWidget {
                         child: Consumer<Userinfo>(
                           builder: (_, user, __) {
                             return UserForm(
-                                user.toggleUseremail,
+                                user.addUseremail,
                                 false,
                                 TextInputType.emailAddress,
                                 "Email",
@@ -73,7 +73,7 @@ class AccountPage extends StatelessWidget {
                         child: Consumer<Userinfo>(
                           builder: (_, user, __) {
                             return UserForm(
-                                user.toggleUserpassword,
+                                user.addUserpassword,
                                 true,
                                 TextInputType.number,
                                 "Password",

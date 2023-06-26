@@ -1,4 +1,4 @@
-import 'package:chat_app/providers/search_load.dart';
+import 'package:chat_app/providers/user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,17 +10,16 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text((Provider.of<SearchLoad>(context).name).toString()),
+        title: Text((Provider.of<Userinfo>(context).userAdded.name).toString()),
         elevation: 0,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FutureBuilder(
-            future: FirestoreManagement()
-                .userInformation(Provider.of<SearchLoad>(context).uid ?? ""),
+            future: FirestoreManagement().userInformation(
+                Provider.of<Userinfo>(context).userAdded.uid ?? ""),
             builder: (_, snapshotFuture) {
               if (snapshotFuture.hasError) {
                 return Center(
@@ -111,17 +110,17 @@ class ChatPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    Consumer<SearchLoad>(
+                    Consumer<Userinfo>(
                       builder: (_, user, __) {
                         return Consumer<InputProvider>(
                           builder: (_, message, __) {
                             return GestureDetector(
                               onTap: () {
                                 FirestoreManagement().haveChat(
-                                    user.uid.toString(),
-                                    user.name.toString(),
+                                    user.userAdded.uid.toString(),
+                                    user.userAdded.name.toString(),
                                     (message.input?.text).toString());
-                                message.isTouched();
+                                message.Send();
                               },
                               child: Icon(
                                 Icons.send,
@@ -131,7 +130,7 @@ class ChatPage extends StatelessWidget {
                           },
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
               ),

@@ -2,12 +2,12 @@ import 'package:chat_app/services/storage_man.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
+import '../models/user_model.dart';
 
 class FirestoreManagement {
-  String _userID = "";
-  String _userName = "";
   String _docIdController = "";
-  String _photourl = "";
+  UserModel user = UserModel.fromJson({});
+
   //this method returns current user ID
   Future<String> currUID() async {
     await FirebaseFirestore.instance
@@ -16,10 +16,10 @@ class FirestoreManagement {
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        _userID = doc["id"];
+        user.uid = doc["id"];
       });
     });
-    return _userID;
+    return user.uid ?? "";
   }
 
   Future<String> currUserName() async {
@@ -29,52 +29,52 @@ class FirestoreManagement {
         .get()
         .then((snapshot) {
       snapshot.docs.forEach((doc) {
-        _userName = doc['name'];
+        user.name = doc['name'];
       });
     });
-    return _userName;
+    return user.name ?? "";
   }
 
   Future<String> docIDController(String toUid) async {
-    _userID = await currUID();
+    user.uid = await currUID();
     String result = "";
     await FirebaseFirestore.instance
         .collection('messages')
-        .where(FieldPath.documentId, isEqualTo: (toUid + _userID))
+        .where(FieldPath.documentId, isEqualTo: (toUid + user.uid!))
         .get()
         .then((snapshots) {
       if (snapshots.docs.isEmpty) {
-        result = (_userID + toUid); //docid doc1doc2
+        result = (user.uid! + toUid); //docid doc1doc2
       } else {
-        result = (toUid + _userID); //docid doc2doc1
+        result = (toUid + user.uid!); //docid doc2doc1
       }
     });
     return result;
   }
 
   Future<List> userInformation([String touid = ""]) async {
-    _userID = await currUID();
-    _userName = await currUserName();
+    user.uid = await currUID();
+    user.name = await currUserName();
     _docIdController = await docIDController(touid);
 
     if (touid == "") {
       await StorageManagement().takeUserPhotoUrl().then((value) {
-        _photourl = value;
+        user.photourl = value;
       });
-      return [_userID, _userName, _photourl];
+      return [user.uid, user.name, user.photourl];
     } else {
-      return [_userID, _userName, _docIdController];
+      return [user.uid, user.name, _docIdController];
     }
   }
 
   //touid is your friends id
   Future<void> haveChat(String? toUid, String toName, String? content) async {
     if (toUid != null && content != null) {
-      _userID = await currUID();
-      _userName = await currUserName();
+      user.uid = await currUID();
+      user.name = await currUserName();
       _docIdController = await docIDController(toUid);
       await StorageManagement().takeUserPhotoUrl().then((value) {
-        _photourl = value;
+        user.photourl = value;
       });
       String friendurl = "";
       await StorageManagement().takeUserPhotoUrl(toUid).then((value) {
@@ -86,15 +86,12 @@ class FirestoreManagement {
           .collection('messages')
           .doc(_docIdController)
           .set({
-        'from_uid': _userID,
-        'from_name': _userName,
+        'from_uid': user.uid,
+        'from_name': user.name,
         'to_uid': toUid,
         'to_name': toName,
-        'from_photourl': _photourl,
+        'from_photourl': user.photourl,
         'to_photourl': friendurl
-
-        // 'from_photourl': _photourl,
-        // 'to_photourl': friendphotourl
       }); //doc has a id
 
       await FirebaseFirestore.instance
@@ -105,16 +102,16 @@ class FirestoreManagement {
           .add({
         'addtime': DateTime.now(),
         'content': content,
-        'uid': _userID
+        'uid': user.uid
       }); //we storage the data with current user id and his/her friend's id
     }
   }
 
-  Future<void> addUser(String name, String email) async {
+  Future<void> addUser(UserModel user1) async {
     await FirebaseFirestore.instance.collection('users').add({
       "id": Uuid().v1() + DateTime.now().millisecondsSinceEpoch.toString(),
-      "name": name,
-      "email": email,
+      "name": user1.name,
+      "email": user1.email,
       "photourl": ""
     });
   }
@@ -123,7 +120,7 @@ class FirestoreManagement {
   Future<List> getAllCurrentUserMessageProperties() async {
     List tmp = [];
     List data = [];
-    _userID = await FirestoreManagement().currUID();
+    user.uid = await FirestoreManagement().currUID();
 
     QuerySnapshot mainCollectionRef =
         await FirebaseFirestore.instance.collection('messages').get();
@@ -135,7 +132,7 @@ class FirestoreManagement {
       }
     }
     for (int i = 0; i < tmp.length; i++) {
-      if (tmp[i]['uid'] == _userID) {
+      if (tmp[i]['uid'] == user.uid) {
         data.add(tmp[i]);
       }
     }

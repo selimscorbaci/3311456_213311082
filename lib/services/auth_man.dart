@@ -1,30 +1,24 @@
 import 'package:chat_app/services/firestore_man.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-import '../model/users.dart' show Users;
+import '../models/user_model.dart' show UserModel;
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthManagement {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final CollectionReference _firestore =
-      FirebaseFirestore.instance.collection('users');
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<void> createAccount(Users userc) async {
+  Future<void> createAccount(UserModel userc) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
-        email: userc.email,
-        password: userc.password,
-      );
+      if (userc.name != "" && userc.email != "" && userc.password != "") {
+        await _auth.createUserWithEmailAndPassword(
+          email: userc.email!,
+          password: userc.password!,
+        );
 
-      if (userc.name.isNotEmpty &&
-          userc.email.isNotEmpty &&
-          userc.password.isNotEmpty) {
-        await FirestoreManagement().addUser(userc.name, userc.email);
-        // _firestore.add({
+        await FirestoreManagement().addUser(userc);
+        // _firestore.add({s
         //   "id": Uuid().v1() + DateTime.now().millisecondsSinceEpoch.toString(),
         //   "name": userc.name,
         //   "email": userc.email,
@@ -54,10 +48,10 @@ class AuthManagement {
   }
 
 //for login
-  Future<bool?> logIn(Users userc) async {
+  Future<bool?> logIn(UserModel userc) async {
     try {
       await _auth.signInWithEmailAndPassword(
-          email: userc.email, password: userc.password);
+          email: userc.email!, password: userc.password!);
       _showMessage("logged Succesfully", Colors.blueGrey);
       return true;
     } on FirebaseAuthException catch (e) {

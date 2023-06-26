@@ -1,25 +1,30 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' show ChangeNotifier;
-import '../model/users.dart';
+import '../models/user_model.dart';
 
 //for managing user information
 class Userinfo extends ChangeNotifier {
-  final Users _user = Users();
+  UserModel _user = UserModel.fromJson({});
 
-  void toggleUsername(String username) {
+  void addUsername(String username) {
     _user.name = username;
     notifyListeners();
   }
 
-  void toggleUseremail(String email) {
+  void addUseremail(String email) {
     _user.email = email;
     notifyListeners();
   }
 
-  void toggleUserpassword(String password) {
+  void addUserpassword(String password) {
     _user.password = password;
     notifyListeners();
   }
 
-  Users get userAdded => _user;
+  void addUserid(String uid) {
+    _user.uid = uid;
+    notifyListeners();
+  }
+
+  UserModel get userAdded => _user;
 }

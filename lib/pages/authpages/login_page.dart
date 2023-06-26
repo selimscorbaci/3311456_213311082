@@ -41,7 +41,7 @@ class LoginPage extends StatelessWidget {
                         child: Consumer<Userinfo>(
                           builder: (_, user, __) {
                             return UserForm(
-                                user.toggleUseremail,
+                                user.addUseremail,
                                 false,
                                 TextInputType.emailAddress,
                                 "Email",
@@ -56,7 +56,7 @@ class LoginPage extends StatelessWidget {
                         child: Consumer<Userinfo>(
                           builder: (_, user, __) {
                             return UserForm(
-                                user.toggleUserpassword,
+                                user.addUserpassword,
                                 true,
                                 TextInputType.number,
                                 "Password",

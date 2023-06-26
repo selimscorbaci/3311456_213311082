@@ -4,7 +4,6 @@ import 'package:chat_app/services/auth_man.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'providers/input_cont.dart';
 import 'package:chat_app/providers/page_index_cont.dart';
-import 'package:chat_app/providers/search_load.dart';
 import 'package:chat_app/providers/user_info.dart';
 import 'package:chat_app/config/route_generator.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,6 @@ void main() async {
         initialData: null),
     ChangeNotifierProvider(create: (_) => ThemeManagement()),
     ChangeNotifierProvider(create: (_) => Userinfo()),
-    ChangeNotifierProvider(create: (_) => SearchLoad()),
     ChangeNotifierProvider(create: (_) => InputProvider()),
     ChangeNotifierProvider(create: (_) => PageIndexController())
   ], child: MyApp()));

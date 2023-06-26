@@ -118,9 +118,9 @@ class _SettingsPageState extends State<SettingsPage>
                 return OutlinedButton(
                   onPressed: () {
                     AuthManagement().signOut();
-                    user.toggleUseremail("");
-                    user.toggleUsername("");
-                    user.toggleUserpassword("");
+                    user.addUseremail("");
+                    user.addUsername("");
+                    user.addUserpassword("");
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/loginPage', (route) => false);
                   },

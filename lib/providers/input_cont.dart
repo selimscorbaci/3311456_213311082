@@ -9,7 +9,7 @@ class InputProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void isTouched() {
+  void Send() {
     (input?.text != "") ? isSended = true : isSended = false;
     if (isSended) {
       input?.clear();
