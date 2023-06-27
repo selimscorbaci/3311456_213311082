@@ -19,29 +19,28 @@ class SearchPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
-                  child: Consumer<Userinfo>(
-                    builder: (_, email, __) {
-                      return TextField(
-                        onChanged: (value) {
-                          onSearch(_, value);
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.search),
-                            hintText: "Enter a email"),
-                      );
+                  child: TextField(
+                    onChanged: (value) {
+                      onSearch(context, value);
                     },
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: "Enter a email"),
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 8.0, right: 8),
-              //   child: Card(
-              //     child: ListTile(
-              //       trailing: Icon(Icons.arrow_drop_down_circle_rounded),
-              //       title: Text("Friends"),
-              //     ),
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                child: Card(
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/friendsPage');
+                    },
+                    trailing: Icon(Icons.list),
+                    title: Text("Contacts"),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Card(
@@ -69,36 +68,6 @@ class SearchPage extends StatelessWidget {
                           )
                         : Container()),
               ),
-              // StreamBuilder(
-              //   stream: FirebaseFirestore.instance
-              //       .collection('users')
-              //       .snapshots(),
-              //   builder: (context, snapshot) {
-              //     if (snapshot.hasData) {
-              //       final data = snapshot.data?.docs;
-              //       List users = [];
-              //       for (var i in data!) {
-              //         users.add(i);
-              //       }
-
-              //       return Container(
-              //         height: 200,
-              //         child: ListView.builder(
-              //           scrollDirection: Axis.horizontal,
-              //           itemCount: users.length,
-              //           shrinkWrap: true,
-              //           itemBuilder: (context, index) {
-              //             return SearchPageFriends(
-              //               index: index,
-              //               users: users,
-              //             );
-              //           },
-              //         ),
-              //       );
-              //     }
-              //     return CircularProgressIndicator();
-              //   },
-              // ),
             ],
           ),
         ),
