@@ -18,12 +18,6 @@ class AuthManagement {
         );
 
         await FirestoreManagement().addUser(userc);
-        // _firestore.add({s
-        //   "id": Uuid().v1() + DateTime.now().millisecondsSinceEpoch.toString(),
-        //   "name": userc.name,
-        //   "email": userc.email,
-        //   "photourl": ""
-        // });
       }
 
       _showMessage("User created", Colors.blueGrey);
@@ -41,7 +35,11 @@ class AuthManagement {
 //for signout
   Future<void> signOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
+      await FirestoreManagement()
+          .updateStatus("offline")
+          .whenComplete(() async {
+        await FirebaseAuth.instance.signOut();
+      });
     } catch (e) {
       _showMessage("something went wrong", Colors.grey);
     }
@@ -50,8 +48,12 @@ class AuthManagement {
 //for login
   Future<bool?> logIn(UserModel userc) async {
     try {
-      await _auth.signInWithEmailAndPassword(
-          email: userc.email!, password: userc.password!);
+      await _auth
+          .signInWithEmailAndPassword(
+              email: userc.email!, password: userc.password!)
+          .whenComplete(() async {
+        await FirestoreManagement().updateStatus("online");
+      });
       _showMessage("logged Succesfully", Colors.blueGrey);
       return true;
     } on FirebaseAuthException catch (e) {

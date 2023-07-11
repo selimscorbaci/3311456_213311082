@@ -28,6 +28,7 @@ class ChatsPage extends StatelessWidget {
                 return StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('messages')
+                      .orderBy('addtime', descending: true)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {

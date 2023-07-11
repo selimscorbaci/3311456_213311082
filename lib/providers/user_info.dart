@@ -1,4 +1,3 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' show ChangeNotifier;
 import '../models/user_model.dart';
 
@@ -26,5 +25,21 @@ class Userinfo extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addPhoto(String photourl) {
+    _user.photourl = photourl;
+    notifyListeners();
+  }
+
   UserModel get userAdded => _user;
+
+  void empty() {
+    _user = UserModel.fromJson({
+      'uid': null,
+      'name': null,
+      'email': null,
+      'password': null,
+      'photourl': null,
+    });
+    notifyListeners();
+  }
 }

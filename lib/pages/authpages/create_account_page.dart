@@ -29,7 +29,7 @@ class AccountPage extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 30),
                         child: Text(
                           textAlign: TextAlign.center,
-                          "Create Account to Continue",
+                          "Create an Account to Continue",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 25,
@@ -114,7 +114,7 @@ class AccountPage extends StatelessWidget {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          "login page",
+                          "login",
                           style: TextStyle(
                               color: Colors.red,
                               decoration: TextDecoration.underline),

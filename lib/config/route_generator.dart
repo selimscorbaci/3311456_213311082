@@ -1,6 +1,6 @@
 import 'package:chat_app/pages/authpages/passforgot_page.dart';
 import 'package:chat_app/pages/chat_page.dart';
-import 'package:chat_app/pages/contact_page.dart';
+import 'package:chat_app/pages/friends_page.dart';
 import 'package:chat_app/pages/home_page.dart';
 import 'package:chat_app/pages/authpages/create_account_page.dart';
 import 'package:chat_app/pages/authpages/login_page.dart';
@@ -42,7 +42,7 @@ class RouteGenerator {
         );
       case '/friendsPage':
         return MaterialPageRoute(
-          builder: (_) => ContactPage(),
+          builder: (_) => FriendsPage(),
         );
       default:
         break;

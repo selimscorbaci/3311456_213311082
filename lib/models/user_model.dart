@@ -4,6 +4,7 @@ class UserModel {
   String? email;
   String? password;
   String? photourl;
+
   UserModel({
     required uid,
     required name,
@@ -13,11 +14,11 @@ class UserModel {
   });
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      uid: json["uid"] ?? "",
-      name: json["name"] ?? "",
-      email: json["email"] ?? "",
-      password: json["password"] ?? "",
-      photourl: json["photourl"] ?? "",
+      uid: json["uid"],
+      name: json["name"],
+      email: json["email"],
+      password: json["password"],
+      photourl: json["photourl"],
     );
   }
 }

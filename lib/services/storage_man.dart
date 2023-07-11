@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:chat_app/models/user_model.dart';
 import 'package:chat_app/services/firestore_man.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,7 +14,6 @@ class StorageManagement {
           .ref()
           .child('profilepictures')
           .child((toUid == "") ? user.uid! : toUid)
-          // .child("profilepicture")
           .getDownloadURL();
       return user.photourl ?? "";
     } catch (_) {
@@ -24,7 +21,6 @@ class StorageManagement {
     }
   }
 
-  //this is only for android and ios(this function does not work on web)
   Future<void> loadFromCamera() async {
     try {
       var pickedImage =
@@ -36,21 +32,13 @@ class StorageManagement {
             .ref()
             .child('profilepictures')
             .child(user.uid!);
-        // .child("profilepicture");
 
-        ref.putFile(_file!);
-
-        user.photourl = await ref.getDownloadURL();
-
-        final userDocId = await FirebaseFirestore.instance
-            .collection('users')
-            .where(FieldPath.documentId)
-            .where('email', isEqualTo: FirebaseAuth.instance.currentUser?.email)
-            .get();
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userDocId.docs.first.id)
-            .update({"photourl": user.photourl});
+        ref.putFile(_file!).then((p0) async {
+          await ref.getDownloadURL().then((value) async {
+            user.photourl = value;
+            await FirestoreManagement().updateUserPhoto(user.photourl);
+          });
+        });
       }
     } catch (_) {}
   }

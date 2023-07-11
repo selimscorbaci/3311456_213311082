@@ -34,6 +34,11 @@ class ChatsScrolling extends StatelessWidget {
                 (users[index]["to_uid"] == userInformation?.elementAt(0))
                     ? users[index]["from_uid"]
                     : users[index]["to_uid"]);
+            friend.addPhoto(
+                (users[index]["to_photourl"] == userInformation?.elementAt(2))
+                    ? users[index]["from_photourl"]
+                    : users[index]["to_photourl"]);
+
             Navigator.of(context).pushNamed('/chatPage');
           },
           child: Card(
@@ -69,9 +74,26 @@ class ChatsScrolling extends StatelessWidget {
                     ),
                   ),
                 ),
-                (users[index]["to_name"] == userInformation?.elementAt(1))
-                    ? Text(users[index]["from_name"])
-                    : Text(users[index]["to_name"]),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: (users[index]["to_name"] ==
+                              userInformation?.elementAt(1))
+                          ? Text(users[index]["from_name"])
+                          : Text(users[index]["to_name"]),
+                    ),
+                    Container(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.75),
+                      child: Text(
+                        "${users[index]["last_message"]}",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),

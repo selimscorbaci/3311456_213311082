@@ -82,6 +82,7 @@ class LoginPage extends StatelessWidget {
                                       .logIn(value.userAdded)
                                       .then((val) {
                                     if (val == true) {
+                                      value.empty();
                                       Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
                                               '/', (route) => false);
@@ -120,7 +121,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.of(context).pushNamed('/accountPage');
                         },
                         child: Text(
-                          "or create a Account",
+                          "or create an Account",
                           style: TextStyle(
                               color: Colors.red,
                               decoration: TextDecoration.underline),

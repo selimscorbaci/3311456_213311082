@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileKnowledge extends StatelessWidget {
@@ -6,9 +5,13 @@ class ProfileKnowledge extends StatelessWidget {
     super.key,
     required this.text,
     this.userName,
+    this.description,
+    this.ontap,
   });
   final String text;
+  final String? description;
   final String? userName;
+  final void Function()? ontap;
 
   @override
   Widget build(BuildContext context) {
@@ -27,28 +30,35 @@ class ProfileKnowledge extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: SingleChildScrollView(
-                  child: Text(
-                    "${userName ?? FirebaseAuth.instance.currentUser?.email}",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
+              child: SingleChildScrollView(
+                child: userName != null
+                    ? Text(
+                        "${userName}",
+                        style: TextStyle(fontSize: 16),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.80),
+                            child: Text("$description"),
+                          ),
+                          GestureDetector(
+                            onTap: ontap,
+                            child: Icon(
+                              Icons.settings,
+                              color: Colors.grey,
+                            ),
+                          )
+                        ],
+                      ),
               ),
             ),
           ],
         ),
       ),
-      decoration: BoxDecoration(
-          // color: Colors.white,
-          // boxShadow: [
-          //   BoxShadow(
-          //       color: Colors.grey.withOpacity(0.5),
-          //       spreadRadius: 1,
-          //       blurRadius: 1,
-          //       offset: Offset(0, 0)),
-          // ],
-          ),
       width: MediaQuery.of(context).size.width,
     );
   }

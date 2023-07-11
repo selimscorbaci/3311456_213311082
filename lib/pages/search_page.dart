@@ -20,44 +20,50 @@ class SearchPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
                   child: TextField(
-                    onChanged: (value) {
-                      onSearch(context, value);
+                    onChanged: (email) {
+                      onSearch(context, email);
                     },
                     decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
-                        hintText: "Enter a email"),
+                        hintText: "Enter an email"),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: Card(
-                  child: ListTile(
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/friendsPage');
+                  child: Consumer<Userinfo>(
+                    builder: (_, user, __) {
+                      return ListTile(
+                        onTap: () {
+                          user.empty();
+                          Navigator.of(context).pushNamed('/friendsPage');
+                        },
+                        trailing: Icon(Icons.list),
+                        title: Text("Friends"),
+                      );
                     },
-                    trailing: Icon(Icons.list),
-                    title: Text("Contacts"),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Card(
-                    child: (Provider.of<Userinfo>(context)
-                                .userAdded
-                                .email
-                                ?.isNotEmpty ??
-                            false)
+                    child: (Provider.of<Userinfo>(context).userAdded.email !=
+                            null)
                         ? Consumer<Userinfo>(
                             builder: (_, user, __) {
                               return ListTile(
-                                leading: CircleAvatar(),
+                                leading: CircleAvatar(
+                                  backgroundImage: user.userAdded.photourl != ""
+                                      ? NetworkImage(
+                                          "${user.userAdded.photourl}")
+                                      : null,
+                                ),
                                 title: Text(user.userAdded.name.toString()),
                                 subtitle: Text(user.userAdded.email.toString()),
                                 onTap: () {
                                   if (user.userAdded.uid != null) {
-                                    user.addUseremail("");
                                     Navigator.of(context)
                                         .pushNamed('/chatPage');
                                   }
@@ -90,6 +96,8 @@ Future<void> onSearch(BuildContext context, String email) async {
           .addUseremail(doc.get('email'));
       Provider.of<Userinfo>(context, listen: false)
           .addUserid(doc.get('id')); //sender id
+      Provider.of<Userinfo>(context, listen: false)
+          .addPhoto(doc.get('photourl'));
     });
   });
 }
