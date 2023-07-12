@@ -104,7 +104,7 @@ class _SettingsPageState extends State<SettingsPage>
             Card(
               child: ListTile(
                 title: Text(
-                  "Your istatictics",
+                  "Your statistics",
                   style: GoogleFonts.signika(
                     fontSize: 18,
                   ),
