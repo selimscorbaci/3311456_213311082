@@ -2,7 +2,7 @@
 ## Chat App with Flutter which provides for chatting with your friends 
 
 ### Development
-Chat App was developed using Firebase server. Firestore service was used for chatting ,Firebase Storage was used for uploading user profile pictures,Provider was used for state management,Firebase auth was used for authentication,Dark mode and light mode were stored using shared preferences, Lottie was used for animations,The fl_chart library was used for conducting graphical operations and generating charts and more..
+Chat App was developed using Firebase server. Firestore service was used for chatting ,Firebase Storage was used for uploading user profile pictures,Provider was used for state management,Firebase auth was used for authentication,Dark mode and light mode were stored using shared preferences, Lottie was used for animations, fl_chart library was used for conducting graphical operations and generating charts and more..
 
 ![ilk](https://github.com/selimscorbaci/Chat_App/assets/123262965/a85d7b66-a40c-4343-bb7f-4ce6c0221479)
 
